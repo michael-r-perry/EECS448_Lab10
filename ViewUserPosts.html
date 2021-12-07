@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>EECS448 Lab10 - Exercise 6</title>
+    </head>
+    <body>
+        <form action="ViewUserPosts.php" method="post">
+            <label for="user">Select User: </label>
+            <select id="user" name="user">
+                <?php
+                    $connect_err = "";
+
+                    $mysqli = new mysqli("mysql.eecs.ku.edu", "m185p865", "ashuPh7a", "m185p865");
+                    
+                    if ($mysqli->connect_errno) { 
+                        $connect_err = "Connect failed: " + $mysqli->connection_error + "\n";
+                        exit();
+                    }
+                    
+                    if ($connect_err == "") {
+                        $query = "SELECT * FROM Users";
+                        if ($result = $mysqli->query($query)) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row["user_id"] . "'>" . $row["user_id"] . "</option>";
+                            }
+                            $result->free();
+                        }
+                        $mysqli->close();
+                    }
+                ?>
+            </select>
+            <br>
+            <input type="submit">
+        </form>
+    </body>
+</html>

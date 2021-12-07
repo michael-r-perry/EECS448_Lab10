@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>EECS448 Lab10 - Exercise 7</title>
+        <link href="style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <h1>Delete Posts</h1>
+        <form action="DeletePost.php" method="post">
+            <table>
+                <tr>
+                    <th>content</th>
+                    <th>author_id</th>
+                    <th>Delete?</th>
+                </tr>
+                <?php
+                    $connect_err = "";
+
+                    $mysqli = new mysqli("mysql.eecs.ku.edu", "m185p865", "ashuPh7a", "m185p865");
+                    
+                    if ($mysqli->connect_errno) { 
+                        $connect_err = "Connect failed: " + $mysqli->connection_error + "\n";
+                        exit();
+                    }
+
+                    if ($connect_err == "") {
+                        $query = "SELECT * FROM Posts ORDER BY post_id";
+                        if ($result = $mysqli->query($query)) {
+                            while ($row = $result->fetch_assoc()) {
+                                $id = $row["post_id"];
+                                $c = $row["content"];
+                                $a = $row["author_id"];
+                ?>
+                    <tr id='tr_<?= $id ?>'>
+                        <td><?= $c ?></td>
+                        <td><?= $a ?></td>
+                        <td><input type='checkbox' name='delete[]' value='<?= $id ?>'></td>
+                    </tr>
+                <?php
+                            }
+                            $result->free();
+                        }
+                        $mysqli->close();
+                    }
+                ?>
+            </table>
+            <br>
+            <input type="submit">
+        </form>
+    </body>
+</html>
